@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 postNoteToObsidian() {
   local note_path=$1
   local note_name=$2
@@ -19,13 +22,14 @@ postNoteToObsidian() {
 patchContentToDailyNoteObsidian() {
   local header="$1"
   local content="$2"
+  local insert_position="${3:-end}" #beginning or end
   local api_key="${OBSIDIAN_NOTES_API_KEY}"
 
   curl -X 'PATCH' \
     'https://127.0.0.1:27124/periodic/daily/' \
     -H 'accept: */*' \
     -H "Heading: ${header}" \
-    -H 'Content-Insertion-Position: end' \
+    -H "Content-Insertion-Position: ${insert_position}" \
     -H 'Content-Insertion-Ignore-Newline: false' \
     -H 'Heading-Boundary: ::' \
     -H 'Content-Type: text/markdown' \

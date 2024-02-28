@@ -1,5 +1,6 @@
 #!bin/bash
 
+
 getLastPrsFromUser() {
 
     local username=$1
@@ -13,6 +14,6 @@ getLastPrsFromUser() {
     # Specify the GitHub username for which you want to list open pull requests
 
     # List open pull requests for the specified user in the current repository
-    gh_output=$(gh pr list --author $username --repo $repo --state open)
+    local gh_output=$(gh pr list --author $username --repo $repo --state open)
     echo "$gh_output"
 }
