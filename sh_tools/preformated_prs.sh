@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Check if a string was provided as an argument
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <branch-name>"
   exit 1
@@ -59,6 +58,7 @@ else
 fi
 
 PR_CREATION_OUTPUT=$(gh pr create --title "Merge $BRANCH_NAME into master" --body "$PR_TEMPLATE" --base master --head "$BRANCH_NAME" 2>&1)
+echo "$PR_CREATION_OUTPUT"
 git pull
 git rm "${REPO_ROOT}/dummy.txt"
 git commit -m "removed dummy.txt file"
