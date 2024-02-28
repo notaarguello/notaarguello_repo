@@ -21,10 +21,10 @@ patchContentToDailyNoteObsidian() {
   local content="$2"
   local api_key="${OBSIDIAN_NOTES_API_KEY}"
 
-    curl -X 'PATCH' \
+  curl -X 'PATCH' \
     'https://127.0.0.1:27124/periodic/daily/' \
     -H 'accept: */*' \
-    -H 'Heading: ${header}' \
+    -H "Heading: ${header}" \
     -H 'Content-Insertion-Position: end' \
     -H 'Content-Insertion-Ignore-Newline: false' \
     -H 'Heading-Boundary: ::' \

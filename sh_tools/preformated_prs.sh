@@ -7,6 +7,13 @@ if [ $# -ne 1 ]; then
 fi
 
 BRANCH_NAME=$1
+
+if git branch --list | grep -q "^[\* ]*${BRANCH_NAME}$"; then
+  echo "Branch name '$BRANCH_NAME' already exists. Checking out the branch and exiting..."
+  git checkout "$BRANCH_NAME"
+  exit 1
+fi
+
 DATE=$(date +%Y%m%d%H%M)
 REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$(basename "$REPO_ROOT")
@@ -19,7 +26,15 @@ TOOLS_DIR=$(dirname $0)
 git stash push -m "$STASH_NAME"
 
 
-git checkout master
+if ! git checkout master; then
+  echo "Failed to checkout master. Trying main..."
+  # If master fails, attempt to checkout main branch
+  if ! git checkout main; then
+    echo "Failed to checkout main. Exiting..."
+    exit 1
+  fi
+fi
+
 git pull
 git checkout -b "$BRANCH_NAME"
 
