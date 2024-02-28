@@ -7,11 +7,15 @@ if [ $# -ne 1 ]; then
 fi
 
 BRANCH_NAME=$1
-DATE=$(date +%Y%m%d)
+DATE=$(date +%Y%m%d%H%M)
 REPO_ROOT=$(git rev-parse --show-toplevel)
+REPO_NAME=$(basename "$REPO_ROOT")
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 STASH_NAME="${DATE}-${CURRENT_BRANCH}-autostash"
+
+TOOLS_DIR=$(dirname $0)
+
 git stash push -m "$STASH_NAME"
 
 
@@ -39,8 +43,13 @@ else
     PR_TEMPLATE="This PR introduces changes from $BRANCH_NAME into the master branch."
 fi
 
-gh pr create --title "Merge $BRANCH_NAME into master" --body "$PR_TEMPLATE" --base master --head "$BRANCH_NAME"
+PR_CREATION_OUTPUT=$(gh pr create --title "Merge $BRANCH_NAME into master" --body "$PR_TEMPLATE" --base master --head "$BRANCH_NAME" 2>&1)
 git pull
 git rm "${REPO_ROOT}/dummy.txt"
 git commit -m "removed dummy.txt file"
 git push
+
+source "${TOOLS_DIR}/obsidian_tools.sh"
+NOTE_PATH="PRS/${REPO_NAME}"
+postNoteToObsidian "$NOTE_PATH" "$BRANCH_NAME" "$PR_CREATION_OUTPUT"
+patchContentToDailyNoteObsidian "Tickets:" "[[${BRANCH_NAME}]]"
