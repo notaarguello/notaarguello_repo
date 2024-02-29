@@ -8,8 +8,8 @@ postNoteToObsidian() {
   local api_key="${OBSIDIAN_NOTES_API_KEY}"
   
   # URL encode note_path and note_name
-  local encoded_note_path=$(echo "$note_path" | jq -sRr @uri)
-  local encoded_note_name=$(echo "$note_name" | jq -sRr @uri)
+  local encoded_note_path=$(echo "$note_path" | xargs | jq -sRr @uri)
+  local encoded_note_name=$(echo "$note_name" | xargs | jq -sRr @uri)
 
   curl -X 'PUT' \
     "https://127.0.0.1:27124/vault/${encoded_note_path}/${encoded_note_name}.md" \

@@ -4,13 +4,19 @@
 source "${ANDY_TOOLS_DIR}/obsidian_tools.sh"
 source "${ANDY_TOOLS_DIR}/git_helpers.sh"
 
-local teammates="$GITHUB_TEAMMATES"
-local IFS=' ' read -r -a teammates_array <<< "$teammates"
+if [ -z "$GITHUB_TEAMMATES" ]; then
+    echo "GITHUB_TEAMMATES is empty. Exiting..."
+    exit 1
+fi
 
-# Iterate over each teammate and list open pull requests for them
-local users_prs=""
-for teammate in "${teammates_array[@]}"; do
-    local prs_for_teammate=$(list_open_prs_for_user "$teammate")
-    users_prs+="#### User: $teammate\n$prs_for_teammate\n\n"
-    patchContentToDailyNoteObsidian patchContentToDailyNoteObsidian "Tickets:" "${users_prs}" "end"
+users_prs=""
+echo "$GITHUB_TEAMMATES" | tr ' ' '\n' | while IFS= read -r teammate; do
+    prs_for_teammate=$(getLastPrsFromUser "$teammate")
+    if [ -n "$(echo "$prs_for_teammate" | xargs)" ]; then
+        users_prs+=$'**User:** '"$teammate"$'\n'"$prs_for_teammate"$'\n\n'
+    fi
 done
+
+if [ ! -z "$users_prs" ]; then
+    patchContentToDailyNoteObsidian "Tickets:" "${users_prs}" "end"
+fi
