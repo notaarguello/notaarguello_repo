@@ -14,7 +14,7 @@ def backup_sqlite_db(
         sqlite_orig_path:str, duckdb_dest_path:str, 
         duckdb_dest_tbl:str, query:str, incremental_on:Optional[tuple[str, str]]=None):
     df_sqlite_export = query_and_fetchall(sqlite_db_path=sqlite_orig_path, query=query)
-    duckdb_con = duckdb.connect("duckdb_dest_path")
+    duckdb_con = duckdb.connect(duckdb_dest_path)
 
     duckdb_con.sql(f"CREATE TABLE {duckdb_dest_tbl}_stg AS SELECT * FROM df_sqlite_export;")
     duckdb_con.sql(f"ALTER TABLE {duckdb_dest_tbl} RENAME TO {duckdb_dest_tbl}_old;")
