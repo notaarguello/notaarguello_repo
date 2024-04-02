@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "mac_and_iphone_screentime_exporter"
+version = "0.1.0"
+description = "mac_and_iphone_screentime_exporter"
+authors = ["notaarguello <andresjarguello@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.1"
+duckdb = "^0.10.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
