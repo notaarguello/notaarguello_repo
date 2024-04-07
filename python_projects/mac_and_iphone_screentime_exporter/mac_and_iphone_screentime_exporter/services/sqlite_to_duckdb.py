@@ -31,4 +31,4 @@ def backup_sqlite_db(
         duckdb_con.sql(f"CREATE TABLE {duckdb_dest_tbl}_new AS SELECT * FROM (SELECT * FROM {duckdb_dest_tbl}_stg UNION ALL SELECT * FROM {duckdb_dest_tbl}) AS stg_and_old {qualify_clause};")
         duckdb_con.sql(f"DROP TABLE IF EXISTS {duckdb_dest_tbl}_stg;")
         duckdb_con.sql(f"DROP TABLE IF EXISTS {duckdb_dest_tbl};")
-        duckdb_con.sql(f"ALTER TABLE {duckdb_dest_tbl}_new RENAME TO {duckdb_dest_tbl}_old;")
+        duckdb_con.sql(f"ALTER TABLE {duckdb_dest_tbl}_new RENAME TO {duckdb_dest_tbl};")

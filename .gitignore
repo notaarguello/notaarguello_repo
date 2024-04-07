@@ -1,4 +1,5 @@
 .env*
 drafts_and_playground/jupyter/20240302_glcoud*
 drafts_and_playground/io/*
+python_projects/mac_and_iphone_screentime_exporter/io
 *.pyc
