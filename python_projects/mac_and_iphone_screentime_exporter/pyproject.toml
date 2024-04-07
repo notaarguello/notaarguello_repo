@@ -8,6 +8,7 @@ authors = ["notaarguello <andresjarguello@gmail.com>"]
 python = "^3.10"
 pandas = "^2.2.1"
 duckdb = "^0.10.1"
+click = "^8.1.7"
 
 [build-system]
 requires = ["poetry-core"]
