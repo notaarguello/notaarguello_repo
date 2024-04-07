@@ -6,6 +6,7 @@ authors = ["{{cookiecutter.developer}} <{{cookiecutter.developer_email}}>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+PyYAML = "^6.0.1"
 
 [build-system]
 requires = ["poetry-core"]

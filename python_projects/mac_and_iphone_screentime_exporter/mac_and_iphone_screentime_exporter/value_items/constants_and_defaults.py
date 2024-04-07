@@ -10,7 +10,7 @@ DEFAULT_IO_PATH = create_path_if_not_exists(os.path.join(PROJECT_PATH, "io"))
 DEFAULT_DUCKDB_DUMP_PATH = os.path.join(DEFAULT_IO_PATH, "lifestats.db")
 EVENT_CATEGORIZATION_FILEPATH = os.path.join(DEFAULT_IO_PATH, "csv_data", "event_description_categorization.csv")
 
-DEFAULT_KNOWLEDGE_DB_SOURCE_PATH = os.path.join(os.path.expanduser("~"), "Application Support", "Knowledge", "knowledgeC.db")
+DEFAULT_KNOWLEDGE_DB_SOURCE_PATH = os.path.join(os.path.expanduser("~"), "Library", "Application Support", "Knowledge", "knowledgeC.db")
 
 _KNOWLEDGEC_QUERIES_PATH = os.path.join(PROJECT_PATH, "mac_and_iphone_screentime_exporter", "knowledgeC_queries")
 ALL_QUERIES = {
