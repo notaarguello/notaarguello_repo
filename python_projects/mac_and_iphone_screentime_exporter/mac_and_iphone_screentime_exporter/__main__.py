@@ -1,7 +1,10 @@
 import click
 
+from datetime import datetime
+
 from mac_and_iphone_screentime_exporter.value_items import DEFAULT_KNOWLEDGE_DB_SOURCE_PATH, DEFAULT_DUCKDB_DUMP_PATH
 from mac_and_iphone_screentime_exporter.services.knowledgec_full_update import knowledgec_full_update
+from mac_and_iphone_screentime_exporter.services.knowledgec_charts import gen_hourly_screentime_heatmap, gen_daily_screentime_barchart
 
 # Defining the CLI command and its options using Click
 @click.command()
@@ -15,6 +18,11 @@ def knowledgec_update(sqlite_orig_path, duckdb_dest_path):
     """
     
     knowledgec_full_update(sqlite_orig_path=sqlite_orig_path, duckdb_dest_path=duckdb_dest_path)
+    current_year_month_int = int(datetime.now().strftime("%Y%m"))
+    gen_hourly_screentime_heatmap(yearmonth=current_year_month_int)
+    gen_daily_screentime_barchart(yearmonth=current_year_month_int)
+
+
     click.echo("Update completed successfully.")
 
 if __name__ == '__main__':
