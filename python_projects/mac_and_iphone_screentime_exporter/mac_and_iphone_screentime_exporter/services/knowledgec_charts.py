@@ -13,11 +13,12 @@ def gen_hourly_screentime_heatmap(
 
     con = duckdb.connect(database=db_path)
     df = con.sql(f"""
-        SELECT strftime(event_date, '%m-%d %a') event_date, total_screen_time
-        FROM daily_summary 
-        WHERE device_type = 'IPHONE'
-            AND strftime(event_date, '%Y%m')::INT={yearmonth}
-        """
+        SELECT strftime(event_date, '%m-%d %a') event_date, event_hour, SUM(total_screen_time) AS total_screen_time
+        FROM screen_time_by_category_hourly_totals 
+        WHERE device_type = 'IPHONE' AND strftime(event_date, '%Y%m')::INT={yearmonth}
+        GROUP BY 1, 2
+        ORDER BY event_date DESC
+    """
     ).df()
     pivot_df = df.pivot(index='event_date', columns='event_hour', values='total_screen_time')
 
@@ -34,13 +35,13 @@ def gen_hourly_screentime_heatmap(
 
 def gen_daily_screentime_barchart(
         yearmonth:int, img_destination:Optional[str]=None, db_path:Optional[str]=DEFAULT_DUCKDB_DUMP_PATH):
-
     con = duckdb.connect(database=db_path)
     df = con.sql(f"""
         SELECT strftime(event_date, '%m-%d %a') event_date, total_screen_time
         FROM daily_summary 
         WHERE device_type = 'IPHONE'
-            AND strftime(event_date, '%Y%m')::INT={yearmonth}"""
+            AND strftime(event_date, '%Y%m')::INT={yearmonth}
+        """
     ).df()
     plt.figure(figsize=(12, 4))
     sns.barplot(x='event_date', y='total_screen_time', data=df, color="powderblue")

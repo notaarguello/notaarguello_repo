@@ -7,6 +7,7 @@ PROJECT_PATH = os.path.sep + os.path.join(
 )
 
 DEFAULT_IO_PATH = create_path_if_not_exists(os.path.join(PROJECT_PATH, "io"))
+DEFAULT_LOGS_PATH = os.path.join(DEFAULT_IO_PATH, "logs.txt")
 DEFAULT_DUCKDB_DUMP_PATH = os.path.join(DEFAULT_IO_PATH, "lifestats.db")
 EVENT_CATEGORIZATION_FILEPATH = os.path.join(DEFAULT_IO_PATH, "csv_data", "event_description_categorization.csv")
 
