@@ -1,0 +1,2 @@
+cd "/Users/andy/notaarguello/notaarguello_repo/python_projects/mac_and_iphone_screentime_exporter/mac_and_iphone_screentime_exporter";
+poetry run python -m mac_and_iphone_screentime_exporter
