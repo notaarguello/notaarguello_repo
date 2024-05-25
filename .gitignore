@@ -1,6 +1,8 @@
 .env*
-drafts_and_playground/jupyter/20240302_glcoud*
-drafts_and_playground/io/*
-python_projects/mac_and_iphone_screentime_exporter/io
+drafts_and_playground/*
+!drafts_and_playground/jupyter/20240328_mac_screentime_playground.ipynb
+!drafts_and_playground/jupyter/20240302_graphs.ipynb
+!drafts_and_playground/jupyter/pyproject.toml
+!drafts_and_playground/jupyter/poetry.lock
 *.pyc
 *.DS_Store
