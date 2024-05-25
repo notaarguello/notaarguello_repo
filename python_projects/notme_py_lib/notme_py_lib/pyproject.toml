@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "notme_py_lib"
+version = "0.1.0"
+description = "notme_py_lib"
+authors = ["notaarguello <andresjarguello@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+PyYAML = "^6.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

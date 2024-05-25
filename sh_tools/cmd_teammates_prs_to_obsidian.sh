@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -eEx
 
 source "${ANDY_TOOLS_DIR}/obsidian_tools.sh"
 source "${ANDY_TOOLS_DIR}/git_helpers.sh"
