@@ -6,3 +6,4 @@ drafts_and_playground/*
 !drafts_and_playground/jupyter/poetry.lock
 *.pyc
 *.DS_Store
+*.tool-versions
