@@ -1,5 +1,15 @@
 #!bin/bash
 
+
+# Function to check if PR is merged
+check_pr_merged() {
+  local pr_number=$1
+  local repo=$2
+  
+  gh_output=$(gh pr view $pr_number --repo $repo --json merged --jq '.merged')
+  echo "$gh_output"
+}
+
 # Function to get the last PR for a user
 getLastPrsFromUser() {
 
