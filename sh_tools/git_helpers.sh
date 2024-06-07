@@ -126,3 +126,41 @@ watch_pr_merged_and_notify() {
     say "The pull request #$pr_number has not been merged after 40 minutes."
     return 1
 }
+
+# Function to check if a specific workflow run is completed
+check_workflow_completed() {
+    local workflow_name=$1
+    local commit_sha=$2
+    local repo_with_owner=$3
+
+    gh_output=$(gh run list --repo $repo_with_owner --commit $commit_sha --json name,status --jq ".[] | select(.name == \"$workflow_name\") | .status")
+    echo "$gh_output"
+}
+
+# Function to check if a specific workflow run is completed every 2 mins and emit a notification when done
+watch_workflow_and_notify() {
+    local workflow_name=$1
+    local commit_sha=$2
+    local repo_with_owner=$3
+
+    local max_time=$((40 * 60))
+    local interval=120
+    local elapsed_time=0
+
+    while [ $elapsed_time -lt $max_time ]; do
+        local workflow_status=$(check_workflow_completed $workflow_name $commit_sha $repo_with_owner)
+        if [ "$workflow_status" == "completed" ]; then
+            # Emit a sound alert
+            afplay /System/Library/Sounds/Glass.aiff
+            say "The workflow ${workflow_name} has completed."
+            return 0
+        else
+            echo "The workflow ${workflow_name} is not completed. Checking again in 2 minutes..."
+            sleep $interval
+            elapsed_time=$((elapsed_time + interval))
+        fi
+    done
+
+    say "The workflow ${workflow_name} has not completed after 40 minutes."
+    return 1
+}
