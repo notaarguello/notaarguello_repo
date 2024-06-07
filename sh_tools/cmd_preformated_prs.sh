@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eEx
+set -eE
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <branch-name>"
