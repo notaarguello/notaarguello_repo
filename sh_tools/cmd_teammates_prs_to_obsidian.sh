@@ -2,8 +2,10 @@
 
 set -eE
 
-source "${ANDY_TOOLS_DIR}/obsidian_tools.sh"
-source "${ANDY_TOOLS_DIR}/git_helpers.sh"
+local cmd_path=$(dirname "$(realpath "$0")")
+
+source "${cmd_path}/obsidian_tools.sh"
+source "${cmd_path}/git_helpers.sh"
 
 if [ -z "$GITHUB_TEAMMATES" ]; then
     echo "GITHUB_TEAMMATES is empty. Exiting..."

@@ -78,17 +78,17 @@ set_gh_aux_env_vars() {
     local commit_sha=$(get_pr_commit_sha $pr_number $repo_with_owner)
     local repo_root=$(get_repo_root)
 
-    export GH_REPO_WITH_OWNER=$repo_with_owner
-    export GH_REPO_NAME=$repo_name
-    export GH_CURR_BRANCH_PR_NUMBER=$pr_number
-    export GH_CURR_BRANCH_SHA=$commit_sha
-    export GH_REPO_ROOT=$repo_root
+    export AGH_REPO_WITH_OWNER=$repo_with_owner
+    export AGH_REPO_NAME=$repo_name
+    export AGH_CURR_BRANCH_PR_NUMBER=$pr_number
+    export AGH_CURR_BRANCH_SHA=$commit_sha
+    export AGH_REPO_ROOT=$repo_root
 
-    echo "GH_REPO_WITH_OWNER=$GH_REPO_WITH_OWNER"
-    echo "GH_REPO_NAME=$GH_REPO_NAME"
-    echo "GH_CURR_BRANCH_PR_NUMBER=$GH_CURR_BRANCH_PR_NUMBER"
-    echo "GH_CURR_BRANCH_SHA=$GH_CURR_BRANCH_SHA"
-    echo "GH_REPO_ROOT=$GH_REPO_ROOT"
+    echo "AGH_REPO_WITH_OWNER=$GH_REPO_WITH_OWNER"
+    echo "AGH_REPO_NAME=$GH_REPO_NAME"
+    echo "AGH_CURR_BRANCH_PR_NUMBER=$GH_CURR_BRANCH_PR_NUMBER"
+    echo "AGH_CURR_BRANCH_SHA=$GH_CURR_BRANCH_SHA"
+    echo "AGH_REPO_ROOT=$GH_REPO_ROOT"
 }
 
 # Function to check if PR is merged
