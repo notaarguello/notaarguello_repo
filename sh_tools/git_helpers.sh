@@ -1,10 +1,14 @@
-#!bin/bash
-
+#!/bin/bash
 
 # Function to get the open PRs for a user
 get_last_prs_from_user() {
     local username=$1
     local repo_with_owner=$2
+
+    if [ -z "$username" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: get_last_prs_from_user <USERNAME> <REPO_WITH_OWNER>"
+        return 1
+    fi
 
     gh_output=$(gh pr list --author "${username}" --repo "${repo_with_owner}" --state "open" --json number,title,url --jq '.[] | "\(.url) - \(.title)"')
     echo "$gh_output"
@@ -15,95 +19,125 @@ get_last_closed_prs_from_user() {
     local username=$1
     local repo_with_owner=$2
 
+    if [ -z "$username" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: get_last_closed_prs_from_user <USERNAME> <REPO_WITH_OWNER>"
+        return 1
+    fi
+
     gh_output=$(gh pr list --author "${username}" --repo "${repo_with_owner}" --state "closed" --limit 10 --json number,title,url --jq '.[] | "\(.url) - \(.title)"')
     echo "$gh_output"
 }
 
 # Function to get the commit SHA of a PR
 get_pr_commit_sha() {
-  local pr_number=$1
-  local repo_with_owner=$2
+    local pr_number=$1
+    local repo_with_owner=$2
 
-  gh_output=$(gh pr view $pr_number --repo $repo_with_owner --json commits --jq '.commits[-1].oid')
-  echo "$gh_output"
+    if [ -z "$pr_number" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: get_pr_commit_sha <PR_NUMBER> <REPO_WITH_OWNER>"
+        return 1
+    fi
+
+    gh_output=$(gh pr view $pr_number --repo $repo_with_owner --json commits --jq '.commits[-1].oid')
+    echo "$gh_output"
 }
 
 # Function to list names of completed workflow runs for a commit SHA
 list_completed_workflow_names_for_commit() {
-  local commit_sha=$1
-  local repo_with_owner=$2
+    local commit_sha=$1
+    local repo_with_owner=$2
 
-  gh_output=$(gh run list --repo $repo_with_owner --commit $commit_sha --json name,conclusion,status --jq '.[] | select(.status == "completed") | .name')
-  echo "$gh_output"
+    if [ -z "$commit_sha" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: list_completed_workflow_names_for_commit <COMMIT_SHA> <REPO_WITH_OWNER>"
+        return 1
+    fi
+
+    gh_output=$(gh run list --repo $repo_with_owner --commit $commit_sha --json name,conclusion,status --jq '.[] | select(.status == "completed") | .name')
+    echo "$gh_output"
 }
 
 # Function to get the repository name from the current directory
-get_repo_from_dir() {
-  gh_output=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
-  echo "$gh_output"
+get_repo_with_owner() {
+    gh_output=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
+    echo "$gh_output"
 }
 
 # Function to get the repository name only
 get_repo_name() {
-  gh_output=$(gh repo view --json name --jq '.name')
-  echo "$gh_output"
+    gh_output=$(gh repo view --json name --jq '.name')
+    echo "$gh_output"
 }
 
 # Function to get the current branch name
 get_current_branch() {
-  gh_output=$(git rev-parse --abbrev-ref HEAD)
-  echo "$gh_output"
+    gh_output=$(git rev-parse --abbrev-ref HEAD)
+    echo "$gh_output"
 }
 
 # Function to get the PR number for the current branch
 get_pr_number_for_branch() {
-  local branch_name=$1
-  local repo_with_owner=$2
-  gh_output=$(gh pr list --repo $repo_with_owner --head $branch_name --json number --jq '.[0].number')
-  echo "$gh_output"
+    local branch_name=$1
+    local repo_with_owner=$2
+
+    if [ -z "$branch_name" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: get_pr_number_for_branch <BRANCH_NAME> <REPO_WITH_OWNER>"
+        return 1
+    fi
+
+    gh_output=$(gh pr list --repo $repo_with_owner --head $branch_name --json number --jq '.[0].number')
+    echo "$gh_output"
 }
 
 # Function to get the root directory of the Git repository
 get_repo_root() {
-  gh_output=$(git rev-parse --show-toplevel)
-  echo "$gh_output"
+    gh_output=$(git rev-parse --show-toplevel)
+    echo "$gh_output"
 }
 
 set_gh_aux_env_vars() {
-
-    local repo_with_owner=$(get_repo_from_dir)
+    local repo_with_owner=$(get_repo_with_owner)
     local repo_name=$(get_repo_name)
     local current_branch=$(get_current_branch)
     local pr_number=$(get_pr_number_for_branch $current_branch $repo_with_owner)
     local commit_sha=$(get_pr_commit_sha $pr_number $repo_with_owner)
     local repo_root=$(get_repo_root)
 
-    export AGH_REPO_WITH_OWNER=$repo_with_owner
-    export AGH_REPO_NAME=$repo_name
-    export AGH_CURR_BRANCH_PR_NUMBER=$pr_number
-    export AGH_CURR_BRANCH_SHA=$commit_sha
-    export AGH_REPO_ROOT=$repo_root
+    export GH_REPO_WITH_OWNER=$repo_with_owner
+    export GH_REPO_NAME=$repo_name
+    export GH_CURR_BRANCH_PR_NUMBER=$pr_number
+    export GH_CURR_BRANCH_SHA=$commit_sha
+    export GH_REPO_ROOT=$repo_root
 
-    echo "AGH_REPO_WITH_OWNER=$GH_REPO_WITH_OWNER"
-    echo "AGH_REPO_NAME=$GH_REPO_NAME"
-    echo "AGH_CURR_BRANCH_PR_NUMBER=$GH_CURR_BRANCH_PR_NUMBER"
-    echo "AGH_CURR_BRANCH_SHA=$GH_CURR_BRANCH_SHA"
-    echo "AGH_REPO_ROOT=$GH_REPO_ROOT"
+    echo "GH_REPO_WITH_OWNER=$GH_REPO_WITH_OWNER"
+    echo "GH_REPO_NAME=$GH_REPO_NAME"
+    echo "GH_CURR_BRANCH_PR_NUMBER=$GH_CURR_BRANCH_PR_NUMBER"
+    echo "GH_CURR_BRANCH_SHA=$GH_CURR_BRANCH_SHA"
+    echo "GH_REPO_ROOT=$GH_REPO_ROOT"
 }
 
 # Function to check if PR is merged
 check_pr_merged() {
-  local pr_number=$1
-  local repo_with_owner=$2
+    local pr_number=$1
+    local repo_with_owner=$2
 
-  gh_output=$(gh pr view $pr_number --repo $repo_with_owner --json merged --jq '.merged')
-  echo "$gh_output"
+    if [ -z "$pr_number" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: check_pr_merged <PR_NUMBER> <REPO_WITH_OWNER>"
+        return 1
+    fi
+
+    gh_output=$(gh pr view $pr_number --repo $repo_with_owner --json merged --jq '.merged')
+    echo "$gh_output"
 }
 
 # Function to check if PR is merged every 2 mins and emit a notification when done
 watch_pr_merged_and_notify() {
     local pr_number=$1
     local repo_with_owner=$2
+
+    if [ -z "$pr_number" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: watch_pr_merged_and_notify <PR_NUMBER> <REPO_WITH_OWNER>"
+        return 1
+    fi
 
     local max_time=$((40 * 60))
     local interval=120
@@ -133,6 +167,11 @@ check_workflow_completed() {
     local commit_sha=$2
     local repo_with_owner=$3
 
+    if [ -z "$workflow_name" ] || [ -z "$commit_sha" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: check_workflow_completed <WORKFLOW_NAME> <COMMIT_SHA> <REPO_WITH_OWNER>"
+        return 1
+    fi
+
     gh_output=$(gh run list --repo $repo_with_owner --commit $commit_sha --json name,status --jq ".[] | select(.name == \"$workflow_name\") | .status")
     echo "$gh_output"
 }
@@ -142,6 +181,11 @@ watch_workflow_and_notify() {
     local workflow_name=$1
     local commit_sha=$2
     local repo_with_owner=$3
+
+    if [ -z "$workflow_name" ] || [ -z "$commit_sha" ] || [ -z "$repo_with_owner" ]; then
+        echo "Usage: watch_workflow_and_notify <WORKFLOW_NAME> <COMMIT_SHA> <REPO_WITH_OWNER>"
+        return 1
+    fi
 
     local max_time=$((40 * 60))
     local interval=120
