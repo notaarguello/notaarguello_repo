@@ -9,23 +9,23 @@ local cmd_path=$(dirname "$(realpath "$0")")
 set_gh_aux_env_vars
 
 agh_help() {
-    echo "Available commands:"
-    echo "  - agh_get_last_prs"
-    echo "  - agh_get_last_prs_closed"
-    echo "  - agh_get_pr_commit"
-    echo "  - agh_list_completed_wf_for_commit"
-    echo "  - agh_get_repo_with_owner"
-    echo "  - agh_get_repo_name"
-    echo "  - agh_get_pr_for_branch"
-    echo "  - agh_get_repo_root"
-    echo "  - agh_set_gh_env"
-    echo "  - agh_is_pr_merged"
-    echo "  - agh_watch_pr_and_notify"
-    echo "  - agh_is_wf_completed"
-    echo "  - agh_watch_wf_and_notify"
-    echo "  - agh_help"
-    echo "\n"
-    echo "Available vars:"
+    echo 'Available commands:'
+    echo '  - agh_get_last_prs'
+    echo '  - agh_get_last_prs_closed'
+    echo '  - agh_get_pr_commit'
+    echo '  - agh_list_completed_wf_for_commit'
+    echo '  - agh_get_repo_with_owner'
+    echo '  - agh_get_repo_name'
+    echo '  - agh_get_pr_for_branch'
+    echo '  - agh_get_repo_root'
+    echo '  - agh_set_gh_env'
+    echo '  - agh_is_pr_merged'
+    echo '  - agh_watch_pr_and_notify'
+    echo '  - agh_is_wf_completed'
+    echo '  - agh_watch_wf_and_notify'
+    echo '  - agh_help'
+    echo '\n'
+    echo 'Available vars:'
     printenv | grep '^GH_'
 }
 
@@ -44,3 +44,5 @@ alias agh_watch_pr_and_notify='watch_pr_merged_and_notify'
 alias agh_is_wf_completed='check_workflow_completed'
 alias agh_watch_wf_and_notify='watch_workflow_and_notify'
 alias agh_help='agh_help'
+
+#agh_help
