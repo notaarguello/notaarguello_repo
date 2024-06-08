@@ -7,8 +7,8 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-local cmd_path=$(dirname "$(realpath "$0")")
-local branch_name=$(echo $1 | xargs)
+cmd_path=$(dirname "$(realpath "$0")")
+branch_name=$(echo $1 | xargs)
 
 if git branch --list | grep -q "^[\* ]*${branch_name}$"; then
   echo "Branch name '$branch_name' already exists. Checking out the branch and exiting..."
@@ -16,12 +16,12 @@ if git branch --list | grep -q "^[\* ]*${branch_name}$"; then
   exit 1
 fi
 
-local date=$(date +%Y%m%d%H%M)
-local repo_root=$(git rev-parse --show-toplevel)
-local repo_name=$(basename "$repo_root")
+date=$(date +%Y%m%d%H%M)
+repo_root=$(git rev-parse --show-toplevel)
+repo_name=$(basename "$repo_root")
 
-local current_branch=$(git rev-parse --abbrev-ref HEAD)
-local stash_name="${date}-${current_branch}-autostash"
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+stash_name="${date}-${current_branch}-autostash"
 
 
 git stash push -m "$stash_name"
@@ -59,7 +59,7 @@ else
     pr_template="This PR introduces changes from $branch_name into the master branch."
 fi
 
-local pr_creation_output=$(gh pr create --title "Merge $branch_name into master" --body "$pr_template" --base master --head "$branch_name" 2>&1)
+pr_creation_output=$(gh pr create --title "Merge $branch_name into master" --body "$pr_template" --base master --head "$branch_name" 2>&1)
 echo "$pr_creation_output"
 git pull
 git rm "${repo_root}/dummy.txt"
@@ -67,6 +67,6 @@ git commit -m "removed dummy.txt file"
 git push
 
 source "${cmd_path}/obsidian_tools.sh"
-local note_path="PRS/${repo_name}"
+note_path="PRS/${repo_name}"
 postNoteToObsidian "$note_path" "$branch_name" "$pr_creation_output"
 patchContentToDailyNoteObsidian "Tickets:" "[[${branch_name}]]" "beginning"

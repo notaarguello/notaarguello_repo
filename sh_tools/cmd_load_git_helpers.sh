@@ -1,14 +1,12 @@
 #!/bin/bash
 
-set -eE
-
-local cmd_path=$(dirname "$(realpath "$0")")
+cmd_path=$(dirname "$(realpath "$0")")
 
 . "${cmd_path}/git_helpers.sh"
 
 set_gh_aux_env_vars
 
-agh_help() {
+help() {
     echo 'Available commands:'
     echo '  - agh_get_last_prs'
     echo '  - agh_get_last_prs_closed'
@@ -24,7 +22,7 @@ agh_help() {
     echo '  - agh_is_wf_completed'
     echo '  - agh_watch_wf_and_notify'
     echo '  - agh_help'
-    echo '\n'
+    #echo '\n'
     echo 'Available vars:'
     printenv | grep '^GH_'
 }
@@ -43,6 +41,6 @@ alias agh_is_pr_merged='check_pr_merged'
 alias agh_watch_pr_and_notify='watch_pr_merged_and_notify'
 alias agh_is_wf_completed='check_workflow_completed'
 alias agh_watch_wf_and_notify='watch_workflow_and_notify'
-alias agh_help='agh_help'
+alias agh_help='help'
 
-#agh_help
+help

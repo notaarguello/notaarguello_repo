@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-local cmd_path=$(dirname "$(realpath "$0")")
+cmd_path=$(dirname "$(realpath "$0")")
 source "${cmd_path}/.env"
 
 alias andy-pf-pr=". ${cmd_path}/cmd_preformated_prs.sh"
