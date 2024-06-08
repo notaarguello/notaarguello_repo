@@ -1,21 +1,21 @@
 #!bin/bash
 
 
-# Function to get the last PR for a user
-getLastPrsFromUser() {
-
+# Function to get the open PRs for a user
+get_last_prs_from_user() {
     local username=$1
     local repo_with_owner=$2
 
-    if ! command -v gh &> /dev/null; then
-        echo "GitHub CLI (gh) is not installed. Please install it first."
-        exit 1
-    fi
+    gh_output=$(gh pr list --author "${username}" --repo "${repo_with_owner}" --state "open" --json number,title,url --jq '.[] | "\(.url) - \(.title)"')
+    echo "$gh_output"
+}
 
-    # Specify the GitHub username for which you want to list open pull requests
+# Function to get the last 10 closed PRs for a user
+get_last_closed_prs_from_user() {
+    local username=$1
+    local repo_with_owner=$2
 
-    # List open pull requests for the specified user in the current repository
-    gh_output=$(gh pr list --author "${username}" --repo "${repo_with_owner}" --state "open")
+    gh_output=$(gh pr list --author "${username}" --repo "${repo_with_owner}" --state "closed" --limit 10 --json number,title,url --jq '.[] | "\(.url) - \(.title)"')
     echo "$gh_output"
 }
 
