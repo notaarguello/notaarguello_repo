@@ -1,5 +1,39 @@
 #!/bin/bash
 
+
+# Function to get the repository name from the current directory
+get_repo_with_owner() {
+    gh_output=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
+    echo "$gh_output"
+}
+
+# Function to get the repository name only
+get_repo_name() {
+    gh_output=$(gh repo view --json name --jq '.name')
+    echo "$gh_output"
+}
+
+# Function to get the current branch name
+get_current_branch() {
+    gh_output=$(git rev-parse --abbrev-ref HEAD)
+    echo "$gh_output"
+}
+
+# Function to get the URL of a PR
+get_pr_url() {
+    local pr_number=$1
+
+    if [ -z "$pr_number" ]; then
+        echo "Usage: get_pr_url <PR_NUMBER>"
+        return 1
+    fi
+
+    local repo_with_owner=$(get_repo_with_owner)
+
+    gh_output=$(gh pr view "$pr_number" --repo "$repo_with_owner" --json url --jq '.url')
+    echo "$gh_output"
+}
+
 # Function to get the open PRs for a user
 get_last_prs_from_user() {
     local username=$1
@@ -58,24 +92,6 @@ list_completed_workflow_names_for_pr() {
     local commit_sha=$(get_pr_commit_sha "$pr_number")
 
     gh_output=$(gh run list --repo $repo_with_owner --commit $commit_sha --json name,conclusion,status --jq '.[] | select(.status == "completed") | .name')
-    echo "$gh_output"
-}
-
-# Function to get the repository name from the current directory
-get_repo_with_owner() {
-    gh_output=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
-    echo "$gh_output"
-}
-
-# Function to get the repository name only
-get_repo_name() {
-    gh_output=$(gh repo view --json name --jq '.name')
-    echo "$gh_output"
-}
-
-# Function to get the current branch name
-get_current_branch() {
-    gh_output=$(git rev-parse --abbrev-ref HEAD)
     echo "$gh_output"
 }
 
