@@ -19,6 +19,21 @@ get_current_branch() {
     echo "$gh_output"
 }
 
+# Function to get the PR number for a given branch
+get_pr_number_for_branch() {
+    local branch_name=$1
+
+    if [ -z "$branch_name" ]; then
+        echo "Usage: get_pr_number_for_branch <BRANCH_NAME>"
+        return 1
+    fi
+
+    local repo_with_owner=$(get_repo_with_owner)
+
+    gh_output=$(gh pr list --repo "$repo_with_owner" --head "$branch_name" --json number --jq '.[0].number')
+    echo "$gh_output"
+}
+
 # Function to get the URL of a PR
 get_pr_url() {
     local pr_number=$1

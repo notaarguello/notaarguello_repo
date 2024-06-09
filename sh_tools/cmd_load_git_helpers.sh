@@ -23,6 +23,7 @@ help() {
     echo '  - agh_watch_wf_and_notify'
     echo '  - agh_help'
     echo '  - agh_get_pr_url'
+    echo '  - agh_get_pr_no'
     #echo '\n'
     echo 'Available vars:'
     printenv | grep '^GH_'
@@ -44,5 +45,6 @@ alias agh_is_wf_completed='check_workflow_completed'
 alias agh_watch_wf_and_notify='watch_workflow_and_notify'
 alias agh_help='help'
 alias agh_get_pr_url='get_pr_url'
+alias agh_get_pr_no='get_pr_number_for_branch'
 
 help
