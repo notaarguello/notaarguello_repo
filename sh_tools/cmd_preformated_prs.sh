@@ -1,12 +1,13 @@
 #!/bin/bash
 
-set -eEx
+set -eE
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <branch-name>"
   exit 1
 fi
 
+cmd_path=$(dirname "$(realpath "$0")")
 branch_name=$(echo $1 | xargs)
 
 if git branch --list | grep -q "^[\* ]*${branch_name}$"; then
@@ -65,7 +66,7 @@ git rm "${repo_root}/dummy.txt"
 git commit -m "removed dummy.txt file"
 git push
 
-source "${ANDY_TOOLS_DIR}/obsidian_tools.sh"
+source "${cmd_path}/obsidian_tools.sh"
 note_path="PRS/${repo_name}"
 postNoteToObsidian "$note_path" "$branch_name" "$pr_creation_output"
 patchContentToDailyNoteObsidian "Tickets:" "[[${branch_name}]]" "beginning"
